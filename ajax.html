@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AJAX Button Example</title>
+</head>
+<body>
+  <!-- HTML에서 보여주기 위한 부분 -->
+  <div id="result"></div>
+  <button onclick="toggleRequests()">Toggle Requests</button>
+
+  <!-- JavaScript 코드 -->
+  <script>
+    var intervalId; // setInterval 함수가 반환하는 ID를 저장하기 위한 변수
+ 
+    // AJAX 요청 함수
+    function fetchData() {
+  fetch('server.php')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.text();
+    })
+    .then(data => {
+      // 서버 응답 데이터를 처리
+      document.getElementById('result').innerHTML = 'Received data: ' + data;
+
+      // 여기서 필요한 작업을 수행
+    })
+    .catch(error => {
+      console.error('Error during fetch:', error);
+    });
+}
+
+    // 버튼 클릭 시 AJAX 요청 토글
+    function toggleRequests() {
+      // 현재 setInterval이 실행 중이라면 해제, 아니면 시작
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      } else {
+        intervalId = setInterval(fetchData, 1000);
+      }
+    }
+  </script>
+</body>
+</html>
